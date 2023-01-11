@@ -1,9 +1,6 @@
 # Интернет-магазин "ZooStore"
 
-C#, ASP.NET MVC, WebAPI
-Entity Framework
-SQL Server
-Bootstrap, jQuery
+C#, ASP.NET MVC, Entity Framework, SQL Server, Bootstrap, jQuery
 
 ## Главная страница
 ![](1.png)
