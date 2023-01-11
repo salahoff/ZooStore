@@ -1,0 +1,118 @@
+﻿@{ ViewBag.Title = "Главная"; }
+@Html.Partial("_FrontPartial")
+<h1 class="h1big"><span style="color:#008000">ZOO</span>восторг</h1>
+<h4>Интернет-магазин товаров для домашних питомцев</h4>
+<div class="slider">
+    <ul>
+        <li><img src="~/images/1.jpg" alt=""></li>
+        <li><img src="~/images/2.jpg" alt=""></li>
+        <li><img src="~/images/3.jpg" alt=""></li>
+        <li><img src="~/images/4.jpg" alt=""></li>
+        <li><img src="~/images/5.jpg" alt=""></li>
+    </ul>
+</div>
+<div class="jumbotron">
+    <p>
+        Домашние животные - это не только позитивные эмоции и веселье, но и огромная ответственность.
+        Питомца необходимо обеспечить качественным питанием, витаминами, всесторонним уходом.
+        Кроме этого, домашнее животное нуждается в разнообразных игрушках,
+        гигиенических средствах, удобном месте для отдыха. Все это можно приобрести в нашем интернет-магазине.
+        У нас большой выбор зоотоваров - от бюджетного сегмента до премиум-класса.
+    </p>
+
+    <style type="text/css">
+.slider {
+position: relative;
+list-style: none;
+overflow: hidden;
+width: 100%;
+padding: 0;
+margin: 0;
+}
+
+.slider ul,
+.slider li {
+padding: 0;
+margin: 0;
+list-style-type: none;
+}
+
+.slider ul {
+width: 999999px;
+}
+
+.slider ul li {
+list-style-type: none;
+float: left;
+width: auto;
+height: 100%;
+}
+
+.slider ul li img {
+display: block;
+height: auto;
+float: left;
+width: auto;
+height: auto;
+border: 0;
+}
+
+.slider .nav {
+position: absolute;
+left: 15px;
+bottom: 12px;
+}
+
+.slider .nav span {
+opacity: 0.9;
+background: #fff;
+margin: 0 8px 0 0;
+width: 16px;
+height: 16px;
+border-radius: 8px;
+cursor: pointer;
+overflow: hidden;
+display: block;
+float: left;
+box-shadow: 0 1px 2px #000;
+}
+
+        .slider .nav span.on {
+            background: #008000;
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".slider").each(function () { // обрабатываем каждый слайдер
+                var obj = $(this);
+                $(obj).append("<div class='nav'></div>");
+                $(obj).find("li").each(function () {
+                    $(obj).find(".nav").append("<span rel='" + $(this).index() + "'></span>"); // добавляем блок навигации
+                    $(this).addClass("slider" + $(this).index());
+                });
+                $(obj).find("span").first().addClass("on"); // делаем активным первый элемент меню
+            });
+        });
+        function sliderJS(obj, sl) { // slider function
+            var ul = $(sl).find("ul"); // находим блок
+            var bl = $(sl).find("li.slider" + obj); // находим любой из элементов блока
+            var step = $(bl).width(); // ширина объекта
+            $(ul).animate({ marginLeft: "-" + step * obj }, 500); // 500 это скорость перемотки
+        }
+        window.setInterval(function () { var n = $(".slider .nav span.on").next(); if (n.length == 0) n = $(".slider .nav span").first(); n.click(); }, 5000);
+        $(document).on("click", ".slider .nav span", function () { // slider click navigate
+            var sl = $(this).closest(".slider"); // находим, в каком блоке был клик
+            $(sl).find("span").removeClass("on"); // убираем активный элемент
+            $(this).addClass("on"); // делаем активным текущий
+            var obj = $(this).attr("rel"); // узнаем его номер
+            sliderJS(obj, sl); // слайдим
+            return false;
+        });
+    </script>
+</div>
+
+
+
+

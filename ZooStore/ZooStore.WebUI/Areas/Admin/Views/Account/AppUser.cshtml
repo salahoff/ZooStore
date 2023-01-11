@@ -1,0 +1,185 @@
+﻿@model GameStore.WebUI.Areas.Admin.Models.UserViewModel
+@{
+    ViewBag.Title = "Управление пользователями";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#AddModal">Добавить пользователя</button>
+<hr />
+<table class="table table-striped" id="userList">
+    <thead>
+        <tr>
+            <th>ID пользователя</th>
+            <th>Email</th>
+            <th>Имя пользователя</th>
+            <th>Права</th>
+            <th>Операции</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div id="AddModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    @using (Ajax.BeginForm("", "api/User/Create", new { area = "" }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSuccess", OnFailure = "onFailure" }))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Добавить нового пользователя</h4>
+            </div>
+        <div class="modal-body">                
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <fieldset class="form-group">
+                    <label for="Email">Email</label>
+                    @Html.TextBoxFor(u => u.Email, new { @class = "form-control" })
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="UserName">Имя пользователя</label>
+                    @Html.TextBoxFor(u => u.UserName, new { @class = "form-control" })
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="Role">Роль</label>
+                    @Html.DropDownListFor(u => u.Membership, new SelectList(ViewBag.Roles, "Name", "Name"), new { @class = "form-control" })
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary pull-left">Ок</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+
+<div id="EditModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    @using (Ajax.BeginForm("", "api/User/", new { area = "" }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "onSuccess", OnFailure = "onFailure" }))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Редактировать пользователя</h4>
+            </div>
+            <div class="modal-body">                
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                @Html.HiddenFor(u => u.Id)
+                @Html.HiddenFor(u => u.Email)                
+                <fieldset class="form-group">
+                    <label for="Email">Email</label>
+                    @Html.TextBoxFor(u => u.Email, new { @class = "form-control", disabled = "true" })
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="UserName">Имя пользователя</label>
+                    @Html.TextBoxFor(u => u.UserName, new { @class = "form-control"})
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="Role">Роль</label>
+                    @Html.DropDownListFor(u => u.Membership, new SelectList(ViewBag.Roles, "Name", "Name"), new { @class = "form-control" })
+                </fieldset>                
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary pull-left">Обновить</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $().ready(function () {
+            //Load Roles when the page is loaded
+            loadList();
+
+            $('#AddModal').on('show.bs.modal', function () {
+                $('#AddModal').find('#Email').val("");
+                $('#AddModal').find('#UserName').val("");
+                $('#AddModal').find('#Membership').val("");
+                clearMessage();
+            })
+
+            //Add a function to reload the list when the dialog closes
+            $('#AddModal').on('hidden.bs.modal', function () {
+                loadList();
+            })
+
+            $('#EditModal').on('show.bs.modal', function () {
+                clearMessage();
+            })
+
+            $('#EditModal').on('hidden.bs.modal', function () {
+                loadList();
+            })
+        });
+
+        //Make an ajax call to load the users
+        function loadList() {
+            $("#userList").find('tbody').empty();
+            $.getJSON("/api/User/", function (data) {
+                $.each(data, function (i, user) {
+                    $('#userList tbody').append("<tr><td>" + user.Id + "</td><td>" + user.Email + "</td><td>" + user.UserName + "</td><td>" + user.Membership + "</td><td><span><a class='btn btn-success' href='javascript:editModel(\"" + user.Id + "\");'> Изменить</a></span><span style='padding-left: 5px'><a class='btn btn-danger' href='javascript:deleteModel(\"" + user.Id + "\");'> Удалить</a></span></td></tr>");
+                });
+            });
+        }
+
+        //Make an ajax call to delete a user
+        function deleteModel(id) {
+            var result = confirm("Вы уверены, что хотите удалить?");
+            if (result) {
+                $.ajax({
+                    url: '/api/User/' + id,
+                    type: 'DELETE',
+                    success: function (result) {
+                        loadList();
+                    },
+                    error: function (result) {
+                        alert("Не удалось удалить пользователя.Ошибка:" + result);
+                    }
+                });
+            }
+        }
+
+        function editModel(id) {
+            $.ajax({
+                url: '/api/User/' + id,
+                type: 'GET',
+                success: function (result) {
+                    $('#EditModal').find('#Id').val(result.Id);
+                    $('#EditModal').find('#Email').val(result.Email);
+                    $('#EditModal').find('#UserName').val(result.UserName);
+                    $('#EditModal').find('#Membership').val(result.Membership);
+                    $('#EditModal').modal('show');
+                },
+                error: function (result) {
+                    alert("Unable to edit user.")
+                }
+            });
+        }
+
+        function onSuccess(data) {
+            if (data == "Okay") {
+                $('#AddModal').modal('hide');
+                $('#EditModal').modal('hide');
+            } else {
+                clearMessage();
+                $('.text-danger ul').append("<li>" + data + "</li>")
+            }
+        }
+
+        function clearMessage() {
+            $(".text-danger").addClass("validation-summary-errors");
+            $(".text-danger").removeClass("validation-summary-valid");
+            $('.text-danger ul').children().remove();
+        }
+
+        function onFailure(data) {
+            alert('Произошла ошибка.Пожалуйста, попробуйте еще раз.');
+            //alert('Error:' + data.responseText);
+        }
+    </script>
+}
+

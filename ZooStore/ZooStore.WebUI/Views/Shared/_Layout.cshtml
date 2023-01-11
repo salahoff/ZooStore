@@ -1,0 +1,87 @@
+﻿@using GameStore.Extension
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZOOвосторг:@ViewBag.Title</title>
+    <link rel="icon" type="image/x-icon" href="~/images/favicone.ico">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/fancy")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .vcenter {
+            display: inline-block;
+            vertical-align: middle;
+            float: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ul class="nav navbar-nav">
+                    <li class="@Html.IsSelected(actions: "Index", controllers: "Home")">@Html.ActionLink("ZOOвосторг", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })</li>
+                </ul>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="@Html.IsSelected(actions: "Dog", controllers: "Product")">@Html.ActionLink("Собаки", "Dog", "Product", new { area = "" }, null)</li>
+                    <li class="@Html.IsSelected(actions: "Cat", controllers: "Product")">@Html.ActionLink("Кошки", "Cat", "Product", new { area = "" }, null)</li>
+                    <li class="@Html.IsSelected(actions: "Other", controllers: "Product")">@Html.ActionLink("Другие питомцы", "Other", "Product", new { area = "" }, null)</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        @RenderBody()
+        <hr />
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="footer">
+            &copy; @DateTime.Now.Year - ZOOвосторг
+        </div>
+    </footer>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+<!--СКРОЛИНГ-->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> <!--Для скроллинга вниз-->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('.scrollup').fadeIn();
+            } else {
+                $('.scrollup').fadeOut();
+            }
+        });
+
+        $('.scrollup').click(function () {
+            $("html, body").animate({ scrollTop: 0 }, 600);
+            return false;
+        });
+
+    });
+</script>
+
+
+<a href="#" class="scrollup">Наверх</a>

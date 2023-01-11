@@ -1,0 +1,16 @@
+﻿@{ ViewBag.Title = "Заказ оформлен"; }
+
+<div class="center">
+
+    <h3>Ваш заказ успешно оформлен!</h3>
+    <div>
+        <p>
+            В данный момент Ваш заказ обрабатывается нашим сотрудником, а пока Вы можете <a href="https://www.youtube.com/watch?v=3mZ4wTwXZ48" target="_blank">посмотреть данное видео:)</a>.
+        </p>
+    </div>
+
+    <img src="~/images/checkout.jpg" alt="checkout" class="responsive">
+
+    @Html.ActionLink("Вернуться на главную страницу", "Index", new { controller = "Home" }, new { @class = "btn btn-primary" })
+    
+</div>
