@@ -2,8 +2,7 @@
 
 C#, ASP.NET MVC, Entity Framework, SQL Server, Bootstrap, jQuery
 
-Проект сделан на основе:
-<br><a href="https://github.com/Bit-Developer/game-store-aspnet">github.com/Bit-Developer/game-store-aspnet</a>
+Проект сделан на основе: <a href="https://github.com/Bit-Developer/game-store-aspnet">github.com/Bit-Developer/game-store-aspnet</a>
 
 <br>Изменения:
 <br>Оплата происходит без привязки к стороннему платежному сервису (после оплаты пользователь переходит на страницу-заглушку)
