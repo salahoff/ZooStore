@@ -2,6 +2,10 @@
 
 C#, ASP.NET MVC, Entity Framework, SQL Server, Bootstrap, jQuery
 
+<a href="https://github.com/Bit-Developer/game-store-aspnet">Backend взят отсюда</a>
+<br>Изменения:
+Оплата происходит без привязки к стороннему платежному сервису.
+
 ## Главная страница
 ![](1.png)
 
